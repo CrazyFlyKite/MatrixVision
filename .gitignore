@@ -1,0 +1,16 @@
+# Compiled Python files
+__pycache__/
+*.pyc
+
+# Virtual environment
+.venv/
+
+# Generated files or directories
+dist/
+*.egg-info/
+
+# PyCharm IDE files
+.idea/
+
+# MacOS be like
+.DS_Store
