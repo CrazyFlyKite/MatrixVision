@@ -13,39 +13,52 @@ PrerenderedCharacters: TypeAlias = Dict[Tuple[str, Color], Surface]
 PathLikeString: TypeAlias = str | PathLike
 
 # Window
-WINDOW_TITLE: Final[str] = 'Matrix Vision Lobby'
-WINDOW_WIDTH, WINDOW_HEIGHT = 250, 200
+TITLE: Final[str] = 'Matrix Vision'
+WIDTH, HEIGHT = 250, 240
+HALF_WIDTH, HALF_HEIGHT = WIDTH // 2, HEIGHT // 2
 WINDOW_RESIZABLE: Final[bool] = False
 
 # Matrix Vision
-PYGAME_RESOLUTION = WIDTH, HEIGHT = 960, 720
+PYGAME_RESOLUTION = PYGAME_WIDTH, PYGAME_HEIGHT = 960, 720
+NUMBER_OF_SPACES: Final[int] = 20
+KATAKANA: Final[np.ndarray] = np.array(
+	[chr(int('0x30a0', 16) + i) for i in range(96)] + ['' for _ in range(NUMBER_OF_SPACES)])
 
 # Defaults
 DEFAULT_FONT_SIZE: Final[int] = 15
 DEFAULT_FPS: Final[int] = 30
 MIN_FONT_SIZE, MAX_FONT_SIZE = 3, 200
-MIN_FPS, MAX_FPS = 5, 120
+MIN_FPS, MAX_FPS = 5, 240
 
-# Graphics
-NUMBER_OF_SPACES: Final[int] = 20
-KATAKANA: Final[np.ndarray] = np.array(
-	[chr(int('0x30a0', 16) + i) for i in range(96)] + ['' for _ in range(NUMBER_OF_SPACES)])
+# Info
+INFO_MESSAGE: Final[str] = '''
+Matrix Vision is a Python-based application that allows you to create
+dynamic matrix-style visualizations inspired by the iconic \"The Matrix\" movie.
+With Matrix Vision, you can open camera feeds, images, or generate simulated rain displays,
+all with customizable parameters to create unique visual experiences.
 
+The app is inspired by code from CoderSpace\'s YouTube channel.
 
-# Display type
-class DisplayType(Enum):
-	IMAGE: str = 'image'
-	CAMERA: str = 'camera'
-	RAIN: str = 'rain'
-
-
-SUPPORTED_EXTENSIONS: Final[List[str]] = ['png', 'jpg', 'jpeg', 'bmp', 'gif']
+Version: 1.0
+Developer: CrazyFlyKite
+Copyright ©, CrazyFlyKite, All Rights Reserved
+'''
 
 # Fonts
 MAIN_FONT: Final[PathLikeString] = '../assets/fonts/MS Mincho.ttf'
 
 # Colors
 BLACK: Final[Color] = 0, 0, 0
+
+
+# Display type
+class DisplayType(Enum):
+	CAMERA: Final[str] = 'camera'
+	IMAGE: Final[str] = 'image'
+	RAIN: Final[str] = 'rain'
+
+
+SUPPORTED_EXTENSIONS: Final[List[str]] = ['png', 'jpg', 'jpeg', 'bmp', 'gif']
 
 
 # Classes
@@ -56,4 +69,4 @@ class CTkNumberEntry(CTkEntry):
 
 	@staticmethod
 	def on_validate(new_value: str) -> bool:
-		return re.match(r'^\d*$', new_value) is not None
+		return new_value == "" or re.match(r'^\d*$', new_value) is not None

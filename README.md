@@ -1,4 +1,4 @@
-# Matrix Vision
+# MatrixVision
 
 <img alt="Screenshot" src="assets/screenshots/screenshot1.png" width="500"/>
 
@@ -16,8 +16,8 @@ See full requirements in [requirements.txt](requirements.txt).
 
 ## Introduction
 
-**Matrix Vision** is a Python program that adds a matrix effect to your camera.
-The app is inspired by code from **[CoderSpace](https://www.youtube.com/@CoderSpaceChannel)** YouTube channel.
+**MatrixVision** is a Python app that adds a matrix effect to your camera.
+The app is inspired by code from **[CoderSpace](https://www.youtube.com/@CoderSpaceChannel)**'s YouTube channel.
 
 ## Contact
 

@@ -1,10 +1,10 @@
+from tkinter import PhotoImage
 from tkinter.filedialog import askopenfile
-from tkinter.messagebox import showwarning
+from tkinter.messagebox import showinfo, showwarning
 from typing import Optional, IO
 
 from customtkinter import CTk, CTkFont, CTkButton, CTkLabel, CTkFrame, IntVar, LEFT, CENTER
 
-from matrix_rain import MatrixRain
 from matrix_vision import MatrixVision
 from utilities import *
 
@@ -16,10 +16,11 @@ class Main:
 		self.fps_var = IntVar(value=DEFAULT_FPS)
 
 	def setup_window(self) -> None:
-		self.root.wm_title(WINDOW_TITLE)
-		self.root.wm_geometry(f'{WINDOW_WIDTH}x{WINDOW_HEIGHT}')
+		self.root.wm_title(TITLE)
+		self.root.wm_geometry(f'{WIDTH}x{HEIGHT}')
 		self.root.wm_resizable(WINDOW_RESIZABLE, WINDOW_RESIZABLE)
 		self.root.eval('tk::PlaceWindow . center')
+		self.root.wm_iconphoto(True, PhotoImage(file='../assets/images/icon.png'))
 
 	def setup_ui(self) -> None:
 		# Title font
@@ -27,7 +28,7 @@ class Main:
 		preferences_font: CTkFont = CTkFont(size=13, weight='bold')
 
 		# Open
-		CTkLabel(self.root, text='Open Matrix Vision', font=title_font).pack(pady=(2, 5))
+		CTkLabel(self.root, text='Lobby', font=title_font).pack(pady=(2, 5))
 
 		open_frame: CTkFrame = CTkFrame(self.root)
 		open_frame.pack()
@@ -40,7 +41,7 @@ class Main:
 		          ).pack(padx=3, side=LEFT)
 
 		# Preferences
-		CTkLabel(self.root, text='Preferences', font=title_font).pack(pady=5)
+		CTkLabel(self.root, text='Preferences', font=title_font).pack(pady=(20, 5))
 
 		# Font Size
 		font_size_frame: CTkFrame = CTkFrame(self.root)
@@ -50,12 +51,19 @@ class Main:
 		CTkNumberEntry(font_size_frame, width=50, justify=CENTER, textvariable=self.font_size_var
 		               ).pack(padx=5, side=LEFT)
 
-		# DEFAULT_FPS
+		# FPS
 		fps_frame: CTkFrame = CTkFrame(self.root)
 		fps_frame.pack(pady=3)
 
 		CTkLabel(fps_frame, text='FPS', font=preferences_font).pack(padx=5, side=LEFT)
 		CTkNumberEntry(fps_frame, width=50, justify=CENTER, textvariable=self.fps_var).pack(padx=5, side=LEFT)
+
+		# Info
+		CTkButton(self.root, text='Info', width=50, command=self.open_info).place(x=HALF_WIDTH + 60, y=HALF_HEIGHT + 80)
+
+	@staticmethod
+	def open_info() -> None:
+		showinfo('Info', INFO_MESSAGE)
 
 	def open(self, display_type: DisplayType) -> None:
 		if MIN_FONT_SIZE < self.font_size_var.get() > MAX_FONT_SIZE:
@@ -93,7 +101,7 @@ class Main:
 		             image=image.name).run()
 
 	def open_rain(self) -> None:
-		MatrixRain(font_size=self.font_size_var.get(), fps=self.fps_var.get()).run()
+		MatrixVision(display_type=DisplayType.RAIN, font_size=self.font_size_var.get(), fps=self.fps_var.get()).run()
 
 	def run(self) -> None:
 		self.setup_window()

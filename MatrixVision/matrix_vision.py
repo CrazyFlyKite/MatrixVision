@@ -54,7 +54,7 @@ class Matrix:
 		self.app = matrix_vision
 		self.font = pygame.font.Font(MAIN_FONT, font_size)
 
-		size: Tuple[int, int] = HEIGHT // font_size, WIDTH // font_size
+		size: Tuple[int, int] = PYGAME_HEIGHT // font_size, PYGAME_WIDTH // font_size
 		self.matrix = np.random.choice(KATAKANA, size)
 		self.character_intervals = np.random.randint(25, 50, size=size)
 		self.column_speed = np.random.randint(100, 250, size=size)
@@ -90,7 +90,7 @@ class Matrix:
 
 		return prerendered_characters
 
-	def draw(self) -> None:
+	def draw_image(self) -> None:
 		match self.display_type:
 			case DisplayType.CAMERA:
 				image: pygame.pixelarray.PixelArray = self.get_camera_frame()
@@ -112,6 +112,14 @@ class Matrix:
 						rendered_character.set_alpha(color + 60)
 						self.app.surface.blit(rendered_character, position)
 
+	def draw_rain(self) -> None:
+		for y, row in enumerate(self.matrix):
+			for x, character in enumerate(row):
+				self.app.surface.blit(
+					self.prerendered_characters[(character, (0, 170, 0))],
+					(x * self.font_size, y * self.font_size)
+				)
+
 	def shift_columns(self, frames: int) -> None:
 		number_columns: np.ndarray = np.unique(np.argwhere(frames % self.column_speed == 0)[:, 1])
 		self.matrix[:, number_columns] = np.roll(self.matrix[:, number_columns], shift=1, axis=0)
@@ -125,4 +133,8 @@ class Matrix:
 
 		self.change_characters(frames)
 		self.shift_columns(frames)
-		self.draw()
+
+		if self.display_type in {DisplayType.CAMERA, DisplayType.IMAGE}:
+			self.draw_image()
+		else:
+			self.draw_rain()
